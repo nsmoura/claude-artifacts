@@ -1,0 +1,16 @@
+{
+  "name": "cecilia-1ano",
+  "version": "1.0.0",
+  "description": "Site de celebração do 1º aniversário da Cecília",
+  "type": "module",
+  "scripts": {
+    "build": "mkdir -p public && cp cecilia-faz-1-ano-leve.html public/index.html",
+    "dev": "netlify dev"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  }
+}
