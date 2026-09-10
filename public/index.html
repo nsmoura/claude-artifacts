@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cecília — 1 ano · Florescendo entre as belezas do Pantanal</title>
+<meta name="description" content="Venha celebrar o primeiro aninho da Cecília! 10 de outubro, 16h, Clube Marisco.">
+<meta property="og:title" content="Cecília — 1 ano · Florescendo entre as belezas do Pantanal">
+<meta property="og:description" content="Venha celebrar com a gente! 10 de outubro, às 16h, no Clube Marisco.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://i.imgur.com/X2SeST0.jpeg">
+<meta name="twitter:card" content="summary_large_image">
+<link href="https://fonts.googleapis.com/css2?family=Playball&family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FBF6EA;
+    --cream-deep: #F2E8D3;
+    --terracotta: #C1705A;
+    --terracotta-deep: #A8563A;
+    --olive: #5B6B42;
+    --olive-deep: #414E2E;
+    --pink: #F3B9C6;
+    --pink-deep: #E397AA;
+    --gold: #D9A441;
+    --ink: #3A3428;
+    --ink-soft: #6E6552;
+  }
+  * { box-sizing: border-box; }
+  p { margin: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: 'Amatic SC', sans-serif;
+    color: var(--ink);
+    background: var(--cream);
+    overflow-x: hidden;
+  }
+  body.locked { overflow: hidden; height: 100vh; }
+
+  img { max-width: 100%; display: block; }
+
+  /* ---------- pétalas globais ---------- */
+  .petal {
+    position: fixed; top: -40px; pointer-events: none; z-index: 3;
+    animation: fall linear infinite; opacity: 0.8;
+  }
+  @keyframes fall {
+    0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+    6% { opacity: 0.85; }
+    94% { opacity: 0.85; }
+    100% { transform: translateY(110vh) translateX(var(--drift,8px)) rotate(50deg); opacity: 0; }
+  }
+
+  /* ---------- HERO ---------- */
+  #hero {
+    position: fixed; inset: 0; z-index: 100;
+    background: radial-gradient(circle at 50% 20%, #FDF9EF 0%, var(--cream) 55%, var(--cream-deep) 100%);
+    text-align: center;
+    transition: opacity 1s ease, visibility 1s ease;
+    overflow-y: auto;
+  }
+  #hero.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  .intro-slide, .main-slide {
+    position: absolute; inset: 0; padding: 32px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+
+  /* --- slide 1: frase de abertura --- */
+  .intro-slide.hidden-slide { display: none; }
+  .intro-corner {
+    position: absolute; width: 74px; opacity: 0;
+  }
+  .intro-corner.tl {
+    top: 18px; left: 10px;
+    animation: introCornerInTL 1.2s ease forwards 0.2s, introCornerFloatTL 3.4s ease-in-out infinite 1.4s;
+  }
+  .intro-corner.br {
+    bottom: 18px; right: 10px;
+    animation: introCornerInBR 1.2s ease forwards 0.4s, introCornerFloatBR 3.4s ease-in-out infinite 1.6s;
+  }
+  @keyframes introCornerInTL {
+    from { opacity: 0; transform: rotate(-10deg) translateY(10px); }
+    to   { opacity: 0.85; transform: rotate(-10deg) translateY(0); }
+  }
+  @keyframes introCornerFloatTL {
+    0%, 100% { transform: rotate(-10deg) translateY(0); }
+    50%      { transform: rotate(-4deg) translateY(-8px); }
+  }
+  @keyframes introCornerInBR {
+    from { opacity: 0; transform: rotate(8deg) scaleX(-1) translateY(-10px); }
+    to   { opacity: 0.85; transform: rotate(8deg) scaleX(-1) translateY(0); }
+  }
+  @keyframes introCornerFloatBR {
+    0%, 100% { transform: rotate(8deg) scaleX(-1) translateY(0); }
+    50%      { transform: rotate(2deg) scaleX(-1) translateY(8px); }
+  }
+  .hero-intro {
+    font-family: 'Amatic SC', sans-serif; font-size: 26px; line-height: 1.35; color: var(--ink-soft);
+    margin: 0 0 22px; max-width: 300px;
+    opacity: 0; animation: riseIn 1.1s ease forwards; animation-delay: 0.5s;
+  }
+  .intro-tap {
+    font-family: 'Amatic SC', sans-serif; font-size: 17px; color: var(--terracotta);
+    letter-spacing: 0.05em; border: 1.5px solid var(--terracotta); border-radius: 999px; padding: 8px 20px;
+    opacity: 0; animation: riseIn 1s ease 1.1s forwards, pulseOpacity 1.8s ease-in-out 1.9s infinite;
+  }
+  @keyframes pulseOpacity { 0%,100%{opacity:0.5;} 50%{opacity:1;} }
+
+  /* --- slide 2: nome + árvore + botão --- */
+  .main-slide {
+    opacity: 0; transform: translateY(6px); pointer-events: none;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .main-slide.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+  .hero-tree {
+    width: min(190px, 44vw);
+    margin: 0 auto 14px;
+    filter: drop-shadow(0 14px 18px rgba(58,52,40,0.18));
+  }
+  .hero-tree-wrap { position: relative; }
+  .top-flourish {
+    font-size: 20px; color: var(--pink-deep); letter-spacing: 0.15em;
+    margin-bottom: 18px; opacity: 0.9;
+    animation: flourishFloat 3.5s ease-in-out infinite;
+  }
+  @keyframes flourishFloat { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-5px);} }
+  .hero-petal {
+    position: absolute; width: 20px; pointer-events: none;
+    animation: heroPetalFly ease-in-out infinite;
+  }
+  @keyframes heroPetalFly {
+    0%   { transform: translate(0,0) rotate(0deg); opacity: 0; }
+    12%  { opacity: 0.95; }
+    100% { transform: translate(var(--hx,60px), var(--hy,140px)) rotate(var(--hr,180deg)); opacity: 0; }
+  }
+
+  .hero-eyebrow {
+    font-family: 'Amatic SC', sans-serif; font-size: 22px; letter-spacing:0.04em; color: var(--olive-deep);
+    margin: 0 0 2px;
+  }
+  .hero-title {
+    font-family: 'Playball', cursive; font-weight: 400; font-size: clamp(40px, 12vw, 64px);
+    color: var(--terracotta-deep); margin: 0; line-height: 1;
+  }
+  .hero-year {
+    font-family: 'Amatic SC', sans-serif; font-weight: 600; font-size: 17px; letter-spacing: 0.25em;
+    color: var(--olive-deep); margin: 0;
+  }
+  .hero-tagline {
+    font-family: 'Amatic SC', sans-serif; font-size: 22px; letter-spacing:0.02em; color: var(--ink-soft); margin: 4px 0 0; max-width: 280px;
+  }
+  .hero-hint {
+    margin-top: 10px; display: flex; flex-direction: column; align-items: center; gap: 2px;
+  }
+  .hero-hint .txt { font-family: 'Amatic SC', sans-serif; font-size: 15px; color: var(--olive-deep); }
+  .hero-hint .arrow { font-size: 16px; color: var(--terracotta); animation: bounceDown 1.4s ease-in-out infinite; }
+  @keyframes bounceDown { 0%,100%{transform:translateY(0);} 50%{transform:translateY(6px);} }
+  @keyframes riseIn { from { opacity: 0; transform: translateY(14px);} to { opacity: 1; transform: translateY(0);} }
+
+  .enter-btn {
+    margin-top: 18px; font-family: 'Amatic SC', sans-serif; font-weight: 700; font-size: 16px;
+    letter-spacing: 0.14em; color: #fff; background: linear-gradient(135deg, var(--olive), var(--olive-deep));
+    border: none; padding: 13px 26px; border-radius: 999px; cursor: pointer;
+    box-shadow: 0 12px 26px -10px rgba(65,78,46,0.55);
+    animation: breathe 3s ease-in-out infinite;
+    text-transform: uppercase;
+  }
+  @keyframes breathe { 0%,100%{box-shadow:0 12px 26px -10px rgba(65,78,46,0.55);} 50%{box-shadow:0 16px 34px -8px rgba(65,78,46,0.7);} }
+
+  /* ---------- MAIN ---------- */
+  #main { opacity: 0; transition: opacity 0.8s ease; }
+  #main.show { opacity: 1; }
+
+  .section {
+    max-width: 560px; margin: 0 auto; padding: 70px 26px;
+    text-align: center;
+  }
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.9s ease, transform 0.9s ease; }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+
+  .section-eyebrow {
+    font-family: 'Amatic SC', sans-serif; font-size: 24px; letter-spacing:0.03em; color: var(--terracotta); margin: 0 0 4px;
+  }
+  .section-title {
+    font-family: 'Playball', cursive; font-weight: 400; font-size: 38px; color: var(--terracotta-deep); margin: 0 0 18px;
+  }
+  .section-text { color: var(--ink-soft); font-size: 20px; line-height: 1.5; max-width: 440px; margin: 0 auto 8px; }
+
+  .divider-flor { display: flex; justify-content: center; align-items: flex-end; gap: 22px; margin: 30px 0; }
+  .divider-flor img { width: 46px; opacity: 0.92; }
+  .divider-flor img:nth-child(2) { width: 54px; margin-bottom: -4px; }
+  .divider-flor.divider-single img { width: 120px; }
+
+  .section-critter { width: 62px; margin: 0 auto 14px; opacity: 0.95; }
+  .section-critter-wide { width: 220px; max-width: 70%; }
+
+  .footer-scene img { width: 100%; max-width: 380px; opacity: 1; }
+  .critter-spot { position: absolute; cursor: pointer; }
+
+  /* Nosso dia */
+  .info-cards { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin: 26px 0 30px; }
+  .info-card {
+    background: #fff; border-radius: 18px; padding: 20px 22px; min-width: 130px;
+    box-shadow: 0 10px 24px -14px rgba(58,52,40,0.25);
+  }
+  .info-card .ic-icon { display: flex; justify-content: center; margin-bottom: 8px; }
+  .info-card .ic-label { font-size: 13px; letter-spacing: 0.08em; font-family: 'Amatic SC', sans-serif; font-weight:700; color: var(--ink-soft); text-transform: uppercase; }
+  .info-card .ic-value { font-family: 'Amatic SC', sans-serif; font-weight: 700; font-size: 22px; color: var(--ink); margin-top: 2px; }
+
+  .pill-btn {
+    display: inline-block; font-family: 'Amatic SC', sans-serif; font-weight: 700; font-size: 17px;
+    color: #fff; background: linear-gradient(135deg, var(--terracotta), var(--terracotta-deep));
+    padding: 14px 30px; border-radius: 999px; text-decoration: none; border: none; cursor: pointer;
+    box-shadow: 0 10px 22px -10px rgba(168,86,58,0.5); transition: transform 0.2s ease;
+    letter-spacing: 0.04em;
+  }
+  .pill-btn:hover { transform: translateY(-2px); }
+  .pill-btn.olive { background: linear-gradient(135deg, var(--olive), var(--olive-deep)); box-shadow: 0 10px 22px -10px rgba(65,78,46,0.5); }
+
+  /* Countdown */
+  .countdown-wrap { background: #fff; border-radius: 24px; padding: 30px 20px; box-shadow: 0 14px 32px -18px rgba(58,52,40,0.3); }
+  .countdown-grid { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+  .countdown-grid .cbox { min-width: 66px; }
+  .countdown-grid .cnum { font-family: 'Amatic SC', sans-serif; font-weight: 700; font-size: 40px; color: var(--terracotta-deep); }
+  .countdown-grid .cunit { font-size: 13px; letter-spacing: 0.1em; font-family: 'Amatic SC', sans-serif; font-weight:700; color: var(--ink-soft); text-transform: uppercase; margin-top: 2px; }
+  .today-msg { font-family: 'Playball', cursive; font-size: 30px; color: var(--terracotta-deep); }
+
+  /* Mural de recadinhos */
+  .mural-box { background: #fff; border-radius: 24px; padding: 30px 24px; box-shadow: 0 14px 32px -18px rgba(58,52,40,0.3); text-align: left; }
+  .mural-box input[type="text"], .mural-box textarea {
+    width: 100%; padding: 11px 14px; border-radius: 12px; border: 1.5px solid #DDD0B8;
+    background: var(--cream); font-family: 'Amatic SC', sans-serif; font-size: 19px; color: var(--ink);
+    resize: vertical; margin-bottom: 6px;
+  }
+  .mural-box input:focus, .mural-box textarea:focus { outline: 2px solid var(--terracotta); outline-offset: 1px; }
+  .mural-counter { text-align: right; font-size: 14px; color: var(--ink-soft); font-family: 'Amatic SC', sans-serif; margin-bottom: 14px; }
+  .mural-counter.limit { color: var(--terracotta-deep); }
+  .mural-feed { margin-top: 22px; display: flex; flex-direction: column; gap: 12px; max-height: 380px; overflow-y: auto; padding-right: 4px; }
+  .note-card {
+    background: var(--cream); border-radius: 14px; padding: 14px 16px;
+    border-left: 4px solid var(--pink-deep); animation: notein 0.4s ease both;
+  }
+  @keyframes notein { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: translateY(0);} }
+  .note-card .note-name { font-family: 'Amatic SC', sans-serif; font-weight: 700; font-size: 19px; color: var(--terracotta-deep); }
+  .note-card .note-text { font-size: 17px; color: var(--ink); line-height: 1.4; margin-top: 2px; white-space: pre-wrap; word-break: break-word; }
+  .note-card .note-time { font-size: 12px; color: var(--ink-soft); margin-top: 6px; font-family: 'Amatic SC', sans-serif; }
+  .mural-empty { text-align: center; color: var(--ink-soft); font-size: 17px; font-family: 'Amatic SC', sans-serif; padding: 10px 0; }
+
+  /* RSVP */
+  .rsvp-box { background: #fff; border-radius: 24px; padding: 34px 24px; box-shadow: 0 14px 32px -18px rgba(58,52,40,0.3); }
+
+  /* Overlay modal (RSVP) */
+  .overlay {
+    position: fixed; inset: 0; background: rgba(58,52,40,0.5); backdrop-filter: blur(3px);
+    display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 210;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+  }
+  .overlay.open { opacity: 1; pointer-events: auto; }
+  .modal {
+    background: var(--cream); border-radius: 22px; max-width: 400px; width: 100%;
+    padding: 30px 26px 26px; position: relative;
+    transform: translateY(16px) scale(0.96); transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+    max-height: 88vh; overflow-y: auto;
+  }
+  .overlay.open .modal { transform: translateY(0) scale(1); }
+  .modal h3 { font-family: 'Playball', cursive; color: var(--terracotta-deep); font-size: 30px; margin: 0 0 4px; text-align: center; font-weight: 400; }
+  .modal p.sub { text-align: center; color: var(--ink-soft); font-size: 18px; font-family: 'Amatic SC', sans-serif; margin: 0 0 20px; }
+  .close-x { position: absolute; top: 14px; right: 16px; background: none; border: none; font-size: 20px; color: var(--ink-soft); cursor: pointer; }
+
+  label { display: block; font-size: 16px; color: var(--ink); margin: 14px 0 6px; font-weight: 700; font-family: 'Amatic SC', sans-serif; }
+  label:first-of-type { margin-top: 0; }
+  input[type="text"], input[type="number"], textarea {
+    width: 100%; padding: 11px 14px; border-radius: 12px; border: 1.5px solid #DDD0B8;
+    background: #fff; font-family: 'Amatic SC', sans-serif; font-size: 19px; color: var(--ink); resize: vertical;
+  }
+  input:focus, textarea:focus { outline: 2px solid var(--terracotta); outline-offset: 1px; }
+  .two-col { display: flex; gap: 10px; }
+  .two-col > div { flex: 1; }
+
+  .submit-btn {
+    width: 100%; margin-top: 20px; padding: 14px; border-radius: 999px; border: none;
+    background: linear-gradient(135deg, var(--olive), var(--olive-deep)); color: #fff;
+    font-family: 'Amatic SC', sans-serif; font-weight: 700; font-size: 19px; cursor: pointer;
+  }
+  .submit-btn:disabled { opacity: 0.5; }
+  .error-msg { color: var(--terracotta-deep); font-size: 15px; font-family: 'Amatic SC', sans-serif; margin-top: 8px; text-align: center; min-height: 16px; }
+  .success-msg { text-align: center; padding: 10px 0 4px; }
+  .success-msg .heart { font-size: 40px; display: block; margin-bottom: 10px; animation: pop 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+  @keyframes pop { 0%{transform:scale(0);} 70%{transform:scale(1.15);} 100%{transform:scale(1);} }
+
+  .top-btn {
+    position: fixed; bottom: 20px; left: 20px; z-index: 90;
+    width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid var(--pink-deep);
+    background: #fff; color: var(--terracotta-deep); font-size: 18px; cursor: pointer;
+    box-shadow: 0 8px 18px -8px rgba(58,52,40,0.35);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transform: translateY(10px); pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .top-btn.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+  /* Rodapé */
+  footer { text-align: center; padding: 50px 24px 40px; background: var(--cream-deep); }
+  footer .f-title { font-family: 'Playball', cursive; font-size: 32px; color: var(--terracotta-deep); margin: 0; }
+  footer .f-tag { font-family: 'Amatic SC', sans-serif; font-size: 22px; color: var(--ink-soft); margin: 4px 0 22px; }
+</style>
+</head>
+<body class="locked">
+<script src="/storage-api.js"></script>
+
+<!-- HERO -->
+<div id="hero">
+  <div class="intro-slide" id="introSlide">
+    <p class="hero-intro">Com o coração cheio de gratidão, Aline e Denilson convidam você para ver a Cecília florir em seu primeiro aninho de vida.</p>
+    <p class="intro-tap" id="introTap">toque para continuar</p>
+  </div>
+
+  <div class="main-slide" id="mainSlide">
+    <div class="top-flourish">✿ ⋆ ❀ ⋆ ✿</div>
+    <p class="hero-eyebrow">✿ você foi convidado(a) para ✿</p>
+    <h1 class="hero-title">Cecília</h1>
+    <p class="hero-year">1 ANO</p>
+    <p class="hero-tagline">Florescendo entre as belezas do Pantanal</p>
+    <div class="hero-hint"><span class="txt">clique no botão abaixo para abrir</span><span class="arrow">↓</span></div>
+    <button class="enter-btn" id="enterBtn">Entrar na celebração</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <!-- NOSSO DIA -->
+  <section class="section reveal" id="nossoDia">
+    <p class="section-eyebrow">com muito carinho</p>
+    <h2 class="section-title">Venha celebrar o nosso dia</h2>
+    <div class="info-cards">
+      <div class="info-card"><div class="ic-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5B6B42" stroke-width="1.6"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>
+      </div><div class="ic-label">Data</div><div class="ic-value">10 de outubro</div></div>
+      <div class="info-card"><div class="ic-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5B6B42" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+      </div><div class="ic-label">Horário</div><div class="ic-value">às 16h</div></div>
+      <div class="info-card"><div class="ic-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5B6B42" stroke-width="1.6"><path d="M12 21s7-7.5 7-12.5A7 7 0 0 0 5 8.5C5 13.5 12 21 12 21z"/><circle cx="12" cy="8.5" r="2.5"/></svg>
+      </div><div class="ic-label">Local</div><div class="ic-value">Clube Marisco</div></div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <a class="pill-btn" href="https://www.google.com/maps/search/?api=1&query=Clube+Marisco+-+St.+8%2C+Lad%C3%A1rio+-+MS%2C+79370-000" target="_blank" rel="noopener">Como chegar</a>
+    </div>
+  </section>
+
+  <!-- MURAL DE RECADINHOS -->
+  <section class="section reveal">
+    <p class="section-eyebrow">deixe seu carinho</p>
+    <h2 class="section-title">Mural de recadinhos</h2>
+    <div class="mural-box">
+      <label for="muralName" style="margin-top:0;">Seu nome</label>
+      <input type="text" id="muralName" placeholder="Como você se chama?" maxlength="40">
+
+      <label for="muralMsg">Sua mensagem</label>
+      <textarea id="muralMsg" rows="3" maxlength="200" placeholder="Escreva algo fofo para a Cecília..."></textarea>
+      <div class="mural-counter" id="muralCounter">200 caracteres restantes</div>
+
+      <p class="error-msg" id="muralError"></p>
+      <button class="submit-btn" id="muralSubmit">Postar recadinho</button>
+
+      <div class="mural-feed" id="muralFeed">
+        <p class="mural-empty">carregando recadinhos...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- RSVP -->
+  <section class="section reveal">
+    <p class="section-eyebrow">a festa fica ainda melhor com você</p>
+    <h2 class="section-title">Você vem celebrar com a gente?</h2>
+    <div class="rsvp-box">
+      <p class="section-text" style="margin-bottom:22px;">Sua presença tornará esse dia ainda mais especial!</p>
+      <button class="pill-btn" id="openRsvp">Confirmar presença</button>
+      <p id="rsvpCounter" style="margin-top:16px;font-family:'Amatic SC',sans-serif;font-size:18px;color:var(--olive-deep);"></p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="reveal">
+    <p class="f-title">Cecília | 1 ano</p>
+    <p class="f-tag">Florescendo entre as belezas do Pantanal</p>
+  </footer>
+</div>
+
+<!-- RSVP modal -->
+<div class="overlay" id="rsvpOverlay">
+  <div class="modal">
+    <button class="close-x" id="rsvpClose">✕</button>
+    <div id="rsvpForm">
+      <h3>Confirmar presença</h3>
+      <p class="sub">10 de outubro · às 16h · Clube Marisco</p>
+
+      <label for="rName">Seu nome</label>
+      <input type="text" id="rName" placeholder="Como você se chama?">
+
+      <div class="two-col">
+        <div>
+          <label for="rAdults">Adultos</label>
+          <input type="number" id="rAdults" min="0" max="10" value="1">
+        </div>
+        <div>
+          <label for="rKids">Crianças</label>
+          <input type="number" id="rKids" min="0" max="10" value="0">
+        </div>
+      </div>
+
+      <label for="rObs">Observações (opcional)</label>
+      <textarea id="rObs" rows="2" placeholder="Restrição alimentar, alguma dúvida..."></textarea>
+
+      <p class="error-msg" id="rError"></p>
+      <button class="submit-btn" id="rSubmit">Enviar confirmação</button>
+    </div>
+    <div id="rsvpSuccess" style="display:none;">
+      <div class="success-msg">
+        <h3 style="font-family:'Playball',cursive;color:var(--terracotta-deep);font-weight:400;">Presença confirmada!</h3>
+        <p style="color:var(--ink-soft);font-size:14px;">Será muito especial ter você conosco.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="top-btn" id="topBtn" aria-label="Voltar ao topo">↑</button>
+
+<script>
+  /* ---- intro -> main slide (dentro do hero) ---- */
+  document.getElementById('introSlide').addEventListener('click', () => {
+    document.getElementById('introSlide').classList.add('hidden-slide');
+    document.getElementById('mainSlide').classList.add('active');
+  });
+
+  /* ---- hero -> conteúdo principal ---- */
+  document.getElementById('enterBtn').addEventListener('click', () => {
+    document.getElementById('hero').classList.add('hidden');
+    document.body.classList.remove('locked');
+    document.getElementById('main').classList.add('show');
+  });
+
+  /* ---- scroll reveal ---- */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* ---- mural de recadinhos ---- */
+  const muralMsgEl = document.getElementById('muralMsg');
+  const muralCounterEl = document.getElementById('muralCounter');
+  const MURAL_LIMIT = 200;
+  muralMsgEl.addEventListener('input', () => {
+    const remaining = MURAL_LIMIT - muralMsgEl.value.length;
+    muralCounterEl.textContent = remaining + ' caracteres restantes';
+    muralCounterEl.classList.toggle('limit', remaining <= 20);
+  });
+
+  function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+  function muralTimeAgo(iso) {
+    const diff = (Date.now() - new Date(iso).getTime()) / 1000;
+    if (diff < 60) return 'agora mesmo';
+    if (diff < 3600) return Math.floor(diff/60) + ' min atrás';
+    if (diff < 86400) return Math.floor(diff/3600) + 'h atrás';
+    return Math.floor(diff/86400) + ' dia(s) atrás';
+  }
+
+  async function loadMural() {
+    const feed = document.getElementById('muralFeed');
+    try {
+      const list = await window.storage.list('message:', true);
+      const keys = (list && list.keys) ? list.keys : [];
+      if (keys.length === 0) {
+        feed.innerHTML = '<p class="mural-empty">seja a primeira pessoa a deixar um recadinho</p>';
+        return;
+      }
+      const entries = [];
+      for (const k of keys) {
+        try {
+          const r = await window.storage.get(k, true);
+          if (r && r.value) entries.push(JSON.parse(r.value));
+        } catch (e) {}
+      }
+      entries.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+      feed.innerHTML = entries.map(e => `
+        <div class="note-card">
+          <div class="note-name">${escapeHtml(e.name)}</div>
+          <div class="note-text">${escapeHtml(e.text)}</div>
+          <div class="note-time">${muralTimeAgo(e.timestamp)}</div>
+        </div>
+      `).join('');
+    } catch (err) {
+      feed.innerHTML = '<p class="mural-empty">não foi possível carregar os recadinhos</p>';
+    }
+  }
+
+  document.getElementById('muralSubmit').addEventListener('click', async () => {
+    const name = document.getElementById('muralName').value.trim();
+    const text = muralMsgEl.value.trim();
+    const errorEl = document.getElementById('muralError');
+    errorEl.textContent = '';
+
+    if (!name) { errorEl.textContent = 'Por favor, escreva seu nome.'; return; }
+    if (!text) { errorEl.textContent = 'Escreva uma mensagem antes de postar.'; return; }
+
+    const btn = document.getElementById('muralSubmit');
+    btn.disabled = true; btn.textContent = 'Enviando...';
+    try {
+      const entry = { name, text: text.slice(0, MURAL_LIMIT), timestamp: new Date().toISOString() };
+      const key = 'message:' + Date.now() + ':' + Math.random().toString(36).slice(2,8);
+      await window.storage.set(key, JSON.stringify(entry), true);
+      document.getElementById('muralName').value = '';
+      muralMsgEl.value = '';
+      muralCounterEl.textContent = MURAL_LIMIT + ' caracteres restantes';
+      muralCounterEl.classList.remove('limit');
+      await loadMural();
+    } catch (err) {
+      errorEl.textContent = 'Algo deu errado ao enviar. Tente de novo.';
+    } finally {
+      btn.disabled = false; btn.textContent = 'Postar recadinho';
+    }
+  });
+
+  loadMural();
+  setInterval(loadMural, 20000);
+
+  /* ---- RSVP ---- */
+  const rsvpOverlay = document.getElementById('rsvpOverlay');
+  document.getElementById('openRsvp').addEventListener('click', () => {
+    rsvpOverlay.classList.add('open');
+    document.getElementById('rsvpForm').style.display = 'block';
+    document.getElementById('rsvpSuccess').style.display = 'none';
+  });
+  document.getElementById('rsvpClose').addEventListener('click', () => rsvpOverlay.classList.remove('open'));
+  rsvpOverlay.addEventListener('click', (e) => { if (e.target === rsvpOverlay) rsvpOverlay.classList.remove('open'); });
+
+  async function updateRsvpCounter() {
+    const el = document.getElementById('rsvpCounter');
+    try {
+      const list = await window.storage.list('rsvp:', true);
+      const keys = (list && list.keys) ? list.keys : [];
+      if (keys.length === 0) { el.textContent = ''; return; }
+      let total = 0;
+      for (const k of keys) {
+        try {
+          const r = await window.storage.get(k, true);
+          if (r && r.value) {
+            const e = JSON.parse(r.value);
+            total += (e.adults||0) + (e.kids||0);
+          }
+        } catch (e) {}
+      }
+      el.textContent = total > 0 ? `${total} pessoa${total>1?'s':''} já confirmada${total>1?'s':''}` : '';
+    } catch (err) {}
+  }
+  updateRsvpCounter();
+
+  document.getElementById('rSubmit').addEventListener('click', async () => {
+    const name = document.getElementById('rName').value.trim();
+    const adults = parseInt(document.getElementById('rAdults').value) || 0;
+    const kids = parseInt(document.getElementById('rKids').value) || 0;
+    const obs = document.getElementById('rObs').value.trim();
+    const errorEl = document.getElementById('rError');
+    errorEl.textContent = '';
+    if (!name) { errorEl.textContent = 'Por favor, escreva seu nome.'; return; }
+
+    const btn = document.getElementById('rSubmit');
+    btn.disabled = true; btn.textContent = 'Enviando...';
+    try {
+      const list = await window.storage.list('rsvp:', true);
+      const keys = (list && list.keys) ? list.keys : [];
+      for (const k of keys) {
+        try {
+          const r = await window.storage.get(k, true);
+          if (r && r.value) {
+            const existing = JSON.parse(r.value);
+            if (existing.name && existing.name.trim().toLowerCase() === name.toLowerCase()) {
+              errorEl.textContent = 'Esse nome já confirmou presença. Fale com a gente direto se precisar corrigir.';
+              btn.disabled = false; btn.textContent = 'Enviar confirmação';
+              return;
+            }
+          }
+        } catch (e) {}
+      }
+      const entry = { name, adults, kids, obs, timestamp: new Date().toISOString() };
+      const key = 'rsvp:' + Date.now() + ':' + Math.random().toString(36).slice(2,8);
+      await window.storage.set(key, JSON.stringify(entry), true);
+      document.getElementById('rsvpForm').style.display = 'none';
+      document.getElementById('rsvpSuccess').style.display = 'block';
+      await updateRsvpCounter();
+    } catch (err) {
+      errorEl.textContent = 'Algo deu errado ao enviar. Tente de novo.';
+    } finally {
+      btn.disabled = false; btn.textContent = 'Enviar confirmação';
+    }
+  });
+
+  // Scroll to top
+  document.getElementById('topBtn').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  window.addEventListener('scroll', () => {
+    document.getElementById('topBtn').classList.toggle('show', window.scrollY > 300);
+  });
+</script>
+</body>
+</html>
